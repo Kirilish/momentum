@@ -6,6 +6,7 @@
     <link href="assets/favicon.ico" rel="shortcut icon" />
     <link rel="stylesheet" href="css/owfont-regular.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/media.css" />
     <title>momentum</title>
   </head>
   <body>
@@ -39,17 +40,10 @@
         <ul class="play-list"></ul>
       </div>
 
-      <div class="todo">
-        <h1 class="todo-name">Список дел</h1>
-        <div class="todo-wrapper">
-          <input
-            class="todo-text"
-            type="text"
-            id="input"
-            placeholder="Добавьте новое задание"
-          />
-          <button id="addBtn">Добавить</button>
-        </div>
+      <div id="todo-container">
+        <h1>Список дел</h1>
+        <input type="text" id="input" placeholder="Добавьте задание" />
+        <button id="addBtn">Добавить</button>
         <ul id="list"></ul>
       </div>
 
@@ -84,11 +78,18 @@
         <div class="author"></div>
       </div>
 
-      <div class="icons">
-        <div class="icon-copy">	&copy;2022</div>
-        <div class="icon-github"><a href="https://github.com/Kirilish"><img src="assets/svg/github.svg" alt=""></a></div>
-        <div class="icon-rss"><a href="https://rs.school/js/"><img src="assets/svg/rs_school.svg" alt=""></a></div>
-        
+      <div class="link">
+        <div class="link-year">&copy;2022</div>
+        <div class="link-github">
+          <a href="https://github.com/Kirilish"
+            ><img src="assets/svg/github.svg" alt=""
+          /></a>
+        </div>
+        <div class="link-rss">
+          <a href="https://rs.school/js/"
+            ><img src="assets/svg/rs_school.svg" alt=""
+          /></a>
+        </div>
       </div>
     </footer>
 
