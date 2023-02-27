@@ -144,7 +144,7 @@ document.querySelector(".city").value = city;
 async function updateWeather(city) {
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&units=metric&appid=${apiKey}`
     );
     const data = await response.json();
     console.log(data);
@@ -193,7 +193,7 @@ if (localStorage.getItem("todos")) {
   renderTodos();
 }
 
-addBtn.addEventListener("click", function() {
+addBtn.addEventListener("click", function () {
   const todo = input.value;
   if (todo !== "") {
     todos.push(todo);
@@ -207,18 +207,36 @@ function renderTodos() {
   list.innerHTML = "";
   for (let i = 0; i < todos.length; i++) {
     const li = document.createElement("li");
-    li.innerText = todos[i];
     li.classList.add("list");
-    
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add("list-checkbox");
+    checkbox.addEventListener("change", function () {
+      if (this.checked) {
+        li.classList.add("checked");
+      } else {
+        li.classList.remove("checked");
+      }
+      saveTodos();
+    });
+
+    const label = document.createElement("label");
+    label.innerText = todos[i];
+    label.classList.add("list-label");
+    label.style.wordBreak = "break-all"; // add this line to apply word-break
+
     const deleteBtn = document.createElement("button");
     deleteBtn.innerText = "Удалить";
-    deleteBtn.addEventListener("click", function() {
+    deleteBtn.addEventListener("click", function () {
       todos.splice(i, 1);
       renderTodos();
       saveTodos();
     });
-    deleteBtn.classList.add("list-btn"); // Add your class name here
-    
+    deleteBtn.classList.add("list-btn");
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
     li.appendChild(deleteBtn);
     list.appendChild(li);
   }
