@@ -211,7 +211,7 @@ function renderTodos() {
     li.classList.add("list");
     
     const deleteBtn = document.createElement("button");
-    deleteBtn.innerText = "Delete";
+    deleteBtn.innerText = "Удалить";
     deleteBtn.addEventListener("click", function() {
       todos.splice(i, 1);
       renderTodos();
