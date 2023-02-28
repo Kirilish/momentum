@@ -162,10 +162,17 @@ async function updateWeather(city) {
     document.querySelector(".humidity").textContent = `Humidity: ${Math.round(
       data.main.humidity
     )}%`;
+    document.querySelector(".weather-error").textContent = "";
     localStorage.setItem("city", city);
   } catch (error) {
     console.error(error);
-    document.querySelector(".weather-error").textContent = "";
+    document.querySelector(".weather-icon").classList = "weather-icon";
+    document.querySelector(".temperature").textContent = "";
+    document.querySelector(".weather-description").textContent = "";
+    document.querySelector(".wind").textContent = "";
+    document.querySelector(".humidity").textContent = "";
+    document.querySelector(".weather-error").textContent =
+      "Ошибка при получении данных о погоде, такого города нет";
   }
 }
 updateWeather(city);
@@ -176,7 +183,7 @@ document.querySelector(".city").addEventListener("input", (event) => {
     updateWeather(newCity);
   } else {
     document.querySelector(".weather-error").textContent =
-      "Please enter a city";
+      "Пожалуйста, введите город";
   }
 });
 

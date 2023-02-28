@@ -45,12 +45,30 @@ function togglePlay() {
 function toggleAudio() {
   isPlay = true;
   play.classList.add("pause");
-  playListContainer.childNodes[playNum].classList.add("item-active", "paused");
+  for (let i = 0; i < arrPlayList.length; i++) {
+    arrPlayList[i].classList.remove("item-active", "paused");
+  }
+  arrPlayList[playNum].classList.add("item-active", "paused");
   CurrentAudio.textContent = playList[playNum].title;
   audioShowTime.textContent = playList[playNum].duration;
   audio.src = playList[playNum].src;
   audio.play();
 }
+
+function playFirstAudio() {
+  playNum = 0;
+  isPlay = false;
+  play.classList.remove("pause");
+  for (let i = 0; i < arrPlayList.length; i++) {
+    arrPlayList[i].classList.remove("item-active", "paused");
+  }
+  arrPlayList[playNum].classList.add("item-active", "paused");
+  CurrentAudio.textContent = playList[playNum].title;
+  audioShowTime.textContent = playList[playNum].duration;
+  audio.src = playList[playNum].src;
+}
+
+playFirstAudio();
 
 arrPlayList.forEach((item, index) => {
   item.addEventListener("click", (e) => {
@@ -62,9 +80,8 @@ arrPlayList.forEach((item, index) => {
       isPlay = false;
       audio.pause();
     } else {
-      for (item of arrPlayList) {
-        item.classList.remove("item-active");
-        item.classList.remove("paused");
+      for (let i = 0; i < arrPlayList.length; i++) {
+        arrPlayList[i].classList.remove("item-active", "paused");
       }
       item.classList.add("paused");
       item.classList.add("item-active");
@@ -137,21 +154,40 @@ audio.addEventListener("timeupdate", () => {
   });
 });
 
-
-
 let currentVolume = 0.5;
-audio.volume = currentVolume;
 
-volumeLine.addEventListener("input", () => {
-  currentVolume = parseFloat(volumeLine.value);
+function changeVolume() {
+  const volumeValue = parseFloat(volumeLine.value);
+  const volume =
+    volumeValue >= 0 && volumeValue <= 1
+      ? volumeValue
+      : volumeValue < 0
+      ? 0
+      : 1;
+  currentVolume = volume;
   audio.volume = currentVolume;
   updateVolumeIcon(currentVolume);
-});
+  const newVolume = parseInt(volumeLine.value);
+  audio.volume = newVolume / 100;
 
-volumeMute.addEventListener("click", () => {
-  audio.muted = !audio.muted;
-  updateVolumeIcon(currentVolume);
-});
+  if (parseInt(newVolume) == 0) {
+    muteVolume.classList.add("fa-volume-up");
+    audio.muted = true;
+  }
+  if (parseInt(newVolume) > 0) {
+    volumeLine.classList.add("fa-volume-up");
+    muteVolume.classList.remove("fa-volume-up");
+    audio.muted = false;
+  }
+}
+for (let e of document.querySelectorAll(
+  'input[type="range"].slider-progress'
+)) {
+  e.style.setProperty("--value", e.value);
+  e.style.setProperty("--min", e.min == "" ? "0" : e.min);
+  e.style.setProperty("--max", e.max == "" ? "100" : e.max);
+  e.addEventListener("input", () => e.style.setProperty("--value", e.value));
+}
 
 function updateVolumeIcon(volume) {
   if (volume === 0 || audio.muted) {
@@ -166,14 +202,16 @@ function updateVolumeIcon(volume) {
   }
 }
 
-function changeVolume() {
-    const volumeLine = document.querySelector(".volume-line");
-  
-    volumeLine.addEventListener("input", () => {
-      const volumeValue = parseFloat(volumeLine.value);
-      const volume = volumeValue >= 0 && volumeValue <= 1 ? volumeValue : volumeValue < 0 ? 0 : 1;
-      audio.volume = volume;
-    });
+volumeLine.addEventListener("input", changeVolume);
+window.addEventListener("load", changeVolume);
+
+volumeMute.addEventListener("click", () => {
+  if (audio.volume === 0) {
+    currentVolume = 0.5;
+    audio.volume = currentVolume;
+  } else {
+    currentVolume = 0;
+    audio.volume = currentVolume;
   }
-  
-  volumeLine.addEventListener("input", changeVolume);
+  updateVolumeIcon(currentVolume);
+});
